@@ -83,7 +83,7 @@ buds = None
 def rlcomplete(text,state):
 	global buds
 	if not state:
-		buds = bot.blist.keys()
+		buds = list(bot.blist.keys())
 		buds.sort()
 
 	x = 0
@@ -125,7 +125,7 @@ class Outputter:
 
 	def hotlist(self):
 		map = self.hl.getList()
-		keys = map.keys()
+		keys = list(map.keys())
 		keys.sort()
 		sys.stdout.write("\n  Hotlist\n  ---------------------------\n")
 		sys.stdout.write(" . is %s\n" % self.last)
@@ -140,7 +140,7 @@ class Outputter:
 	def blist(self):
 		bds = self.bot.blist.copy()
 
-		nms = bds.keys()
+		nms = list(bds.keys())
 		nms.sort()
 		sys.stdout.write("\n  Buddies (%d Online)\n  ---------------------------------------------------------\n" % len(nms))
 
@@ -150,7 +150,7 @@ class Outputter:
 		if len(nms) % 2:
 			offset = len(nms) / 2 + 1
 
-		for x in xrange(len(nms)/2):
+		for x in range(len(nms)/2):
 			nm = nms[x]
 			idle = ""
 			if bds[nm].idle:
@@ -182,7 +182,7 @@ class Outputter:
 	def go(self):
 		while 1:
 
-			l = raw_input("claim> ").strip()
+			l = input("claim> ").strip()
 
 			if l == "":
 				continue
@@ -231,17 +231,17 @@ class Hotlist:
 
 	def _weed(self):
 		t = time.time()
-		for k in self.buddies.keys():
+		for k in list(self.buddies.keys()):
 			if t - self.buddies[k][1] > _HLEXPIRE * 60:
 				del self.buddies[k]
 
 	def hint(self,name):
 		self._weed()
-		if self.buddies.has_key(name):
+		if name in self.buddies:
 			self.buddies[name][1] = time.time()
 		else:
 			letters = []
-			for k in self.buddies.keys():
+			for k in list(self.buddies.keys()):
 				letters.append(self.buddies[k][0])
 
 			# now we find the letter to use for this one
@@ -253,13 +253,13 @@ class Hotlist:
 	def getList(self):
 		self._weed()
 		out = {}
-		for item in self.buddies.keys():
+		for item in list(self.buddies.keys()):
 			out[self.buddies[item][0]] = item
 		return out
 
 	def get(self,letter):
 		letter = letter.lower()
-		for item in self.buddies.keys():
+		for item in list(self.buddies.keys()):
 			if self.buddies[item][0] == letter:
 				return item
 		return None
@@ -352,7 +352,7 @@ class Claim(TocTalk):
 		data_components = data.split(':', 1)
 		err = data_components[0]
 
-		if err in errMessages.keys():
+		if err in list(errMessages.keys()):
 			errmsg1 = errMessages[err]
 		else:
 			errmsg1 = 'unknown error code'
@@ -389,7 +389,7 @@ errMessages = {'901':'%s not currently available',
 
 
 if __name__ == "__main__":
-	sn = raw_input("Username: ").strip()
+	sn = input("Username: ").strip()
 	pw = getpass.getpass("Password: ").strip()
 
 	hl = Hotlist()
@@ -407,7 +407,7 @@ if __name__ == "__main__":
 		bm.addBot(bot,"claimbot")
 
 	except TOCError:
-		output.error(sys.exc_value)
+		output.error(sys.exc_info()[1])
 		sys.exit(1)
 
 

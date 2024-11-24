@@ -100,7 +100,7 @@ class Outputter:
 
 	def hotlist(self):
 		map = self.hl.getList()
-		keys = map.keys()
+		keys = list(map.keys())
 		keys.sort()
 		sys.stdout.write("\n  Hotlist\n  ---------------------------\n")
 		sys.stdout.write(" . is %s\n" % self.last)
@@ -115,7 +115,7 @@ class Outputter:
 	def blist(self):
 		bds = self.bot.blist.copy()
 
-		nms = bds.keys()
+		nms = list(bds.keys())
 		nms.sort()
 		sys.stdout.write("\n  Buddies\n  ---------------------------\n")
 
@@ -186,17 +186,17 @@ class Hotlist:
 
 	def _weed(self):
 		t = time.time()
-		for k in self.buddies.keys():
+		for k in list(self.buddies.keys()):
 			if t - self.buddies[k][1] > _HLEXPIRE * 60:
 				del self.buddies[k]
 
 	def hint(self,name):
 		self._weed()
-		if self.buddies.has_key(name):
+		if name in self.buddies:
 			self.buddies[name][1] = time.time()
 		else:
 			letters = []
-			for k in self.buddies.keys():
+			for k in list(self.buddies.keys()):
 				letters.append(self.buddies[k][0])
 
 			# now we find the letter to use for this one
@@ -208,13 +208,13 @@ class Hotlist:
 	def getList(self):
 		self._weed()
 		out = {}
-		for item in self.buddies.keys():
+		for item in list(self.buddies.keys()):
 			out[self.buddies[item][0]] = item
 		return out
 
 	def get(self,letter):
 		letter = letter.lower()
-		for item in self.buddies.keys():
+		for item in list(self.buddies.keys()):
 			if self.buddies[item][0] == letter:
 				return item
 		return None
@@ -307,7 +307,7 @@ class Claim(TocTalk):
 		data_components = data.split(':', 1)
 		err = data_components[0]
 
-		if err in errMessages.keys():
+		if err in list(errMessages.keys()):
 			errmsg1 = errMessages[err]
 		else:
 			errmsg1 = 'unknown error code'

@@ -66,7 +66,7 @@ class BattleBot(TocTalk):
 		# three times, we'll try.  Ignore the on_ERROR events
 		# if we cannot warn more. We really don't care at
 		# this point
-		for x in xrange(0,3):
+		for x in range(0,3):
 			self.do_EVIL(screenname)
 
 			# so that we don't exceed speed limit

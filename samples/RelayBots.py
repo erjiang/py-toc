@@ -23,7 +23,7 @@ slavePW = "password"
 from toc import TocTalk,BotManager
 
 import time
-import Queue
+import queue
 
 
 class Master(TocTalk):
@@ -31,7 +31,7 @@ class Master(TocTalk):
 		TocTalk.__init__(self,user,passwd)
 		# great method of passing data 
 		# between the threads
-		self.queue = Queue.Queue() 
+		self.queue = queue.Queue() 
 
 	def on_IM_IN(self,data):
 		screenname, dont_care, message = data.split(":",2)

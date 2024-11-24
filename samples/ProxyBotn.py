@@ -60,7 +60,7 @@ Where target screen name contains no spaces.""")
 		target = mess_comps[0]
 
 		if target == "exit":
-			raise SystemExit, 0
+			raise SystemExit(0)
 
 		# Preserve the formatting of the message.
 		exp = re.compile("%s\s+" % target, re.MULTILINE)
